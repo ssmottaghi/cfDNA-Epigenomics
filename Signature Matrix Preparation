@@ -1,0 +1,25 @@
+readSummits2 <- function(file){
+  df <- suppressMessages(data.frame(readr::read_tsv(file, col_names = c("chr","start","end", "name", "score"))))
+  df <- df[,c(1,2,3,5)] #do not keep name column it can make the size really large
+  return(GenomicRanges::makeGRangesFromDataFrame(df=df,keep.extra.columns = TRUE,starts.in.df.are.0based = TRUE))
+}
+
+ir1 <- readSummits2("./R/Data/ARes/All_Samples.fwp.filter.non_overlapping.bed")
+end = ".fwp.filter.non_overlapping.bed"
+ir1d <- data.frame(ir1)
+file_info <- read.table('./R/Data/metadata3.txt', sep='\t', header=TRUE)
+samples <- unique(file_info$Group)
+mat <- data.frame(region=paste0(ir1d$seqnames, ":", ir1d$start, "-", ir1d$end))
+for (i in samples) {
+  address <- paste0("./R/Data/ARes/", i, "/", i, ".fwp.filter.non_overlapping.bed")
+  ir2 <- readSummits2(address)
+  ir2 <- resize(ir2, width = 2 * 250 + 1, fix = "center")
+  ovev <- data.frame(findOverlaps(ir2, ir1))
+  sc <- rep(0, length(ir1))
+  ir2d <- data.frame(ir2)
+  sc[ovev[,2]] = ir2d$score[ovev[,1]]
+  mat[,i] <- sc
+}
+write.table(mat, "./R/Data/Sign_matrix.txt", row.names = FALSE)
+
+
