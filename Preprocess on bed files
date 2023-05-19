@@ -1,0 +1,18 @@
+import pandas, os
+os.chdir("C:/Users/motaghi/PycharmProjects/Thsis/Data")
+
+
+def data_preprocess(data):
+    preprocessed_data = data[["chrom", "chromStart", "chromEnd", "score", "signalValue", "pValue"]]
+    preprocessed_data = preprocessed_data[preprocessed_data["score"] > 100]
+    preprocessed_data = preprocessed_data.sort_values(by=['chrom', 'chromStart', "score", "pValue"])
+    preprocessed_data = preprocessed_data.drop_duplicates(subset=["chrom", "chromStart"], keep='last', ignore_index=True)
+    return preprocessed_data
+
+
+files = os.listdir()
+for file in files:
+    data = pandas.read_table(file, header=0, names=["chrom", "chromStart", "chromEnd", "name", "score",
+                                                             "strand", "signalValue", "pValue", "qValue", "peak"])
+    data = data_preprocess(data)
+    data.to_csv(file[:-4] + "n.bed", header=False, index=False, sep='\t')
