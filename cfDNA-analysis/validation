@@ -1,0 +1,6 @@
+The obtained regions from the tissue ATAC-seq data were investigated based on the depth feature in real cfDNA samples related to healthy, kidney cancer, prostate cancer, lung cancer, colon cancer, and pancreas cancer.
+The raw bam files were obtained from the : http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71378
+
+The ID of the samples: IH01, IC39, IC13, IC15, IC37, and IC50
+
+there are few features such as depth, fragment length, and ent
