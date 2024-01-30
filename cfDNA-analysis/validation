@@ -3,4 +3,9 @@ The raw bam files were obtained from the : http://www.ncbi.nlm.nih.gov/geo/query
 
 The ID of the samples: IH01, IC39, IC13, IC15, IC37, and IC50
 
-there are few features such as depth, fragment length, and ent
+there are few features such as depth, fragment length, and entropy that were measured for the mentioned regions in the cfDNA bam files based.
+
+for depth :
+$ samtools bedcov all_regions.txt illumina/IC39.bam > all_in_kidney.csv
+
+for fragment length and entropy the related python scripts are attached.
