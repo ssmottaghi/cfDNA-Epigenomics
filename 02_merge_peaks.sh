@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # 1. Ensure the directories match your project structure
-# We point to the output of Script 01 (processed_bed) as the macs2dir
 METADATA="Data/metadata.txt"
 SUMMIT_DIR="Data/processed_bed/"
 OUT_DIR="Data/ATACdb/Results/"
