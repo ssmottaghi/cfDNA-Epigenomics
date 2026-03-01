@@ -1,6 +1,4 @@
-# ==============================================================================
-# SELECTION STEP 2: ITERATIVE RANKING AND DEDUPLICATION
-# ==============================================================================
+
 
 # cm_tissues_2: A copy of our median expression matrix to "drain" as we pick rows
 cm_tissues_2 <- data.frame(cm_tissues) 
