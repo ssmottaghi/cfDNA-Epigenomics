@@ -31,3 +31,13 @@ Script: 03_build_count_matrix.R
 Action: Standardizes all peaks to 501bp and overlaps individual sample peaks with the master consensus set.
 
 Output: A numeric matrix (all_sam_mat.rds) where rows are genomic regions and columns are samples, containing the signal scores.
+
+
+
+Step 4: Differential Accessibility Analysis
+
+Script: 04_differential_analysis.R
+
+Action: Performs DESeq2 normalization and runs "One-vs-All" contrasts for each tissue group. It identifies up to 2,000 unique, significant regions per tissue.
+
+Output: A complete DESeq2 object and a filtered table of top markers (top_deg_median_expression.csv).
