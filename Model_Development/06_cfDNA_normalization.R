@@ -1,57 +1,73 @@
 library(tidyr)
 library(readr)
+library(dplyr)
 
-# Function to read cfDNA depth files
+# Helper function to read cfDNA depth files
 readcfDNA <- function(file){
-  # Ensure the file exists before reading
   if(!file.exists(file)) stop(paste("File not found:", file))
-  df <- suppressMessages(data.frame(readr::read_tsv(file, col_names = c("chr_info", "depth"))))
+  # Using read_tsv with explicit col_types to ensure coordinates aren't mangled
+  df <- suppressMessages(readr::read_tsv(file, col_names = FALSE))
   return(df)
 }
 
-# 1. Setup Samples and Containers
-cfDNA_Samples <- c("Healthy", "IH02", "IH03", "Prostate", "Pancreas", "Lung", "Kidney", "Colon")
-# sign_matrix must be loaded from the previous script
-all_depth <- matrix(nrow = nrow(sign_matrix), ncol = length(cfDNA_Samples))
-
-# 2. Loop through each sample to calculate Normalized Depth
-for (j in seq_along(cfDNA_Samples)){
-  i <- cfDNA_Samples[j]
-  
-  # --- Center Depth (0) ---
-  path0 <- paste0("Data/cfDNA/0/all_in_", i, ".csv")
-  df2_raw <- readcfDNA(path0)
-  # Parsing the coordinate string (e.g., "1 100 200") to match sign_matrix rownames
-  df2_split <- df2_raw %>% 
-    separate(chr_info, into = c("chr", "end"), sep = " (?=[^ ]+$)") %>%
-    separate(chr, into = c("chr", "start"), sep = " (?=[^ ]+$)")
-  
-  names2 <- paste0("chr", df2_split$chr, ":", df2_split$start, "-", df2_split$end)
-  df2 <- setNames(df2_raw$depth, names2)[rownames(sign_matrix)]
-  
-  # --- Flank +2500 ---
-  path2500 <- paste0("Data/cfDNA/2500/all+2500_in_", i, ".csv")
-  df2500_raw <- readcfDNA(path2500)
-  # Shift coordinates back to center for matching
-  names2500 <- paste0("chr", df2500_raw$X1, ":", df2500_raw$X2 - 2500, "-", df2500_raw$X3 - 2500)
-  df2500 <- setNames(df2500_raw$depth, names2500)[rownames(sign_matrix)]
-  
-  # --- Flank -2500 ---
-  path_neg2500 <- paste0("Data/cfDNA/-2500/all-2500_in_", i, ".csv")
-  df_neg2500_raw <- readcfDNA(path_neg2500)
-  # Shift coordinates back to center for matching
-  names_neg2500 <- paste0("chr", df_neg2500_raw$X1, ":", df_neg2500_raw$X2 + 2500, "-", df_neg2500_raw$X3 + 2500)
-  df_neg2500 <- setNames(df_neg2500_raw$depth, names_neg2500)[rownames(sign_matrix)]
-  
-  # 3. Calculate Normalized Depth: (2 * Center) / (Flank1 + Flank2)
-  # Adding a small epsilon (1e-6) to denominator avoids division by zero
-  all_depth[,j] <- (2 * df2) / (df_neg2500 + df2500 + 1e-6)
+# --- 1. Setup ---
+# sign_matrix must be loaded from Step 5
+if(!exists("sign_matrix")) {
+  sign_matrix <- readRDS("Data/Processed/sign_matrix_selected.rds")
 }
 
-# 4. Final Formatting
+cfDNA_Samples <- c("Healthy", "IH02", "IH03", "Prostate", "Pancreas", "Lung", "Kidney", "Colon")
+all_depth <- matrix(nrow = nrow(sign_matrix), ncol = length(cfDNA_Samples))
+target_regions <- rownames(sign_matrix)
+
+# --- 2. Iterative Normalization ---
+for (j in seq_along(cfDNA_Samples)){
+  sample_id <- cfDNA_Samples[j]
+  message(paste("Processing cfDNA Sample:", sample_id))
+  
+  # --- Center Depth (0bp offset) ---
+  # Expected format: "chr start end depth" OR "chr:start-end depth"
+  path0 <- paste0("Data/cfDNA/0/all_in_", sample_id, ".csv")
+  df0_raw <- readcfDNA(path0)
+  colnames(df0_raw) <- c("chr_info", "depth")
+  
+  # Parse coordinates to standard chr1:start-end format
+  df0_parsed <- df0_raw %>% 
+    separate(chr_info, into = c("chr", "end"), sep = " (?=[^ ]+$)") %>%
+    separate(chr, into = c("chr", "start"), sep = " (?=[^ ]+$)") %>%
+    mutate(region_id = paste0("chr", chr, ":", start, "-", end))
+  
+  df0_vec <- setNames(df0_parsed$depth, df0_parsed$region_id)[target_regions]
+  
+  # --- Flank +2500bp ---
+  path2500 <- paste0("Data/cfDNA/2500/all+2500_in_", sample_id, ".csv")
+  df2500_raw <- readcfDNA(path2500)
+  colnames(df2500_raw) <- c("chr", "start", "end", "depth")
+  
+  # Shift coordinates back to match the 'Center' labels
+  df2500_vec <- df2500_raw %>%
+    mutate(region_id = paste0("chr", chr, ":", start - 2500, "-", end - 2500)) %>%
+    { setNames(.$depth, .$region_id) }[target_regions]
+  
+  # --- Flank -2500bp ---
+  path_neg2500 <- paste0("Data/cfDNA/-2500/all-2500_in_", sample_id, ".csv")
+  df_neg2500_raw <- readcfDNA(path_neg2500)
+  colnames(df_neg2500_raw) <- c("chr", "start", "end", "depth")
+  
+  # Shift coordinates forward to match the 'Center' labels
+  df_neg2500_vec <- df_neg2500_raw %>%
+    mutate(region_id = paste0("chr", chr, ":", start + 2500, "-", end + 2500)) %>%
+    { setNames(.$depth, .$region_id) }[target_regions]
+  
+  # --- 3. Normalization Formula ---
+  # Ratio = (2 * Center) / (Flank_Left + Flank_Right)
+  all_depth[,j] <- (2 * df0_vec) / (df2500_vec + df_neg2500_vec + 1e-6)
+}
+
+# --- 4. Final Formatting & Export ---
 all_depth_df <- data.frame(all_depth)
 colnames(all_depth_df) <- cfDNA_Samples
-rownames(all_depth_df) <- rownames(sign_matrix)
+rownames(all_depth_df) <- target_regions
 
-# Save for downstream plotting or machine learning
+if(!dir.exists("Data/Processed")) dir.create("Data/Processed")
 saveRDS(all_depth_df, "Data/Processed/cfDNA_normalized_matrix.rds")
