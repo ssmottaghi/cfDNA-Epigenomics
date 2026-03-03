@@ -17,7 +17,7 @@ dds <- DESeqDataSetFromMatrix(countData = round(all_sam_mat_3),
                               colData = file_info, 
                               design = ~ Group)
 
-# fitType='local' as specified in your manuscript
+# fitType='local' is robust for ATAC-seq data where dispersion can vary
 dds <- DESeq(dds, fitType = 'local')
 
 # --- 3. Extract and Clean Normalized Counts ---
@@ -27,14 +27,16 @@ cm <- data.frame(counts(dds, normalized = TRUE))
 cm[all_sam_mat == 0] <- 0
 
 # --- 4. Calculate Median Expression per Group ---
-# We transpose 'cm' to aggregate by Group, then transpose back
+# We use aggregate to find the median for each genomic region across tissue groups
 cm_tissues <- t(aggregate(t(cm), list(file_info$Group), median))
-colnames(cm_tissues) <- cm_tissues[1, ] # Set group names as headers
-cm_tissues <- cm_tissues[-1, ]          # Remove the temporary group name row
-cm_tissues <- as.matrix(cm_tissues)     # Convert to matrix for easier indexing
+colnames(cm_tissues) <- cm_tissues[1, ] 
+cm_tissues <- cm_tissues[-1, ]          
+# Convert to numeric matrix to prevent sorting/indexing errors
+cm_tissues <- apply(cm_tissues, 2, as.numeric)
+rownames(cm_tissues) <- rownames(cm)
 
-# --- 5. Identify Top Differentially Expressed Genes (DEG) ---
-column_names <- unique(file_info$Group) 
+# --- 5. Identify Top Differentially Expressed Regions ---
+column_names <- levels(file_info$Group) 
 n <- length(column_names)
 
 # Initialize an empty data frame to store results
@@ -42,38 +44,37 @@ df_final_results <- data.frame(matrix(nrow = 0, ncol = n))
 colnames(df_final_results) <- column_names
 
 for (i in 1:n) {
-  # Create a contrast vector: 1 for current group vs average of others
+  message(paste("Processing group:", column_names[i]))
+  
+  # One-vs-All contrast vector
   vec <- rep((-1/(n-1)), n)
   vec[i] <- 1
   
-  # Run contrast with LFC threshold
+  # Run contrast
   ress <- results(dds, lfcThreshold = 1, contrast = vec)
   
-  # Filter by Significance: LFC > 2 and padj < 0.05
+  # Filter: LFC > 2 and padj < 0.05
   ress <- ress[which(ress$log2FoldChange > 2 & ress$padj < 0.05), ]
   
-  # Keep top 2000 genes by Log2FoldChange
   if (nrow(ress) > 0) {
+    # Keep top 2000 regions by Log2FoldChange
     ress <- ress[order(-ress$log2FoldChange), ]
     if (nrow(ress) > 2000) {
       ress <- ress[1:2000, ]
     }
     
-    # Identify genes not already in our final table to avoid duplicates
-    new_genes <- setdiff(rownames(ress), rownames(df_final_results))
+    # Deduplicate: only add regions not already picked by a previous group
+    new_regions <- setdiff(rownames(ress), rownames(df_final_results))
     
-    # Add median expression data for these new genes to the final table
-    if (length(new_genes) > 0) {
-      df_final_results <- rbind(df_final_results, cm_tissues[new_genes, , drop = FALSE])
+    if (length(new_regions) > 0) {
+      df_final_results <- rbind(df_final_results, cm_tissues[new_regions, , drop = FALSE])
     }
   }
 }
 
 # --- 6. Save Final Outputs ---
+if(!dir.exists("Data/Processed")) dir.create("Data/Processed")
 save(dds, cm, df_final_results, file = "Data/Processed/deseq_complete_results.RData")
 write.csv(df_final_results, "Data/Processed/top_deg_median_expression.csv")
 
-
-
-
-
+print("Differential analysis complete. Results saved to Data/Processed/")
