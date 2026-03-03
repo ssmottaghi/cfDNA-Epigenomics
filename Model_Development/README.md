@@ -63,3 +63,18 @@ Script: 07_final_biomarker_selection.R
 
 Action: Integrates ATAC-seq and cfDNA data. It selects the top 50 regions per tissue that show the most significant loss of nucleosome protection in cancer versus healthy cfDNA.
 Output: The final biomarker matrix (Final_Biomarker_Matrix.rds) used for the paper's main conclusions.
+
+
+Step 8: Reference Scaling & Deconvolution
+Script: 08_cfDNA_deconvolution.R
+
+Action: > 1. Creates a Reference Matrix (df_all_4) by Min-Max scaling the ATAC-seq signal of the final 650 regions.
+2. Uses NNLS and SVR to deconvolve the patient cfDNA signal against this reference.
+Output: Stacked bar plots in the Results/ folder showing the predicted tissue-of-origin for each cfDNA sample.
+
+
+Step 9: Null Model Permutation Test
+Script: 09_null_model_validation.R
+
+Action: Runs 100 deconvolution iterations using random genomic regions. It compares the RCH (Relative Cancer/Healthy) values of the main model against this random distribution.
+Significance: Proves that the identified biomarkers provide significantly higher signal-to-noise than random genomic background (represented by the "cfDECOR" star vs. the boxplots).
