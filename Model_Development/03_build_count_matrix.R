@@ -1,4 +1,3 @@
-library(ggfortify)
 library(GenomicRanges)
 library(readr)
 
