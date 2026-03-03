@@ -41,3 +41,19 @@ Script: 04_differential_analysis.R
 Action: Performs DESeq2 normalization and runs "One-vs-All" contrasts for each tissue group. It identifies up to 2,000 unique, significant regions per tissue.
 
 Output: A complete DESeq2 object and a filtered table of top markers (top_deg_median_expression.csv).
+
+
+Step 5: Iterative Peak Selection & Heatmap
+Script: 05_iterative_selection.R
+
+Action: Implements a "rank and remove" strategy to select the top 200 unique genomic regions per tissue. This ensures no overlap between tissue-specific blocks.
+
+Output: A publication-ready heatmap (Results/Tissue_Specific_Heatmap.pdf) and the final filtered peak matrix.
+
+
+Step 6: cfDNA Depth Normalization
+Script: 06_cfDNA_depth_normalization.R
+Action: Calculates a normalized depth ratio for each ATAC-seq peak using a 5kb flanking window ($+/- 2500$ bp) in cfDNA samples. This identifies regions of differential nucleosome protection.
+Input: CSV files in Data/cfDNA/ organized by offset.
+Output: A normalized depth matrix (cfDNA_normalized_matrix.rds).
+
