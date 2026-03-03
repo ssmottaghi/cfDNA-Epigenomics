@@ -57,3 +57,9 @@ Action: Calculates a normalized depth ratio for each ATAC-seq peak using a 5kb f
 Input: CSV files in Data/cfDNA/ organized by offset.
 Output: A normalized depth matrix (cfDNA_normalized_matrix.rds).
 
+
+Step 7: Final Biomarker Cross-Validation
+Script: 07_final_biomarker_selection.R
+
+Action: Integrates ATAC-seq and cfDNA data. It selects the top 50 regions per tissue that show the most significant loss of nucleosome protection in cancer versus healthy cfDNA.
+Output: The final biomarker matrix (Final_Biomarker_Matrix.rds) used for the paper's main conclusions.
