@@ -23,3 +23,11 @@ Place it in the root directory of this project.
 Run bash 02_merge_peaks.sh.
 
 This will merge your individual preprocessed peaks into a non-overlapping master peak set.
+
+
+Step 3: Signal Matrix Construction
+Script: 03_build_count_matrix.R
+
+Action: Standardizes all peaks to 501bp and overlaps individual sample peaks with the master consensus set.
+
+Output: A numeric matrix (all_sam_mat.rds) where rows are genomic regions and columns are samples, containing the signal scores.
