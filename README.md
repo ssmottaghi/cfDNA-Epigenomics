@@ -1,4 +1,4 @@
-cfDNA Analysis & cfDECOR Model Construction
+# cfDNA Analysis & cfDECOR Model Construction
 This repository contains the end-to-end pipeline for cell-free DNA (cfDNA) analysis and the development of the cfDECOR model. The project is divided into two primary modules:
 
 1. cfDNA-analysis: This folder contains the bioinformatics pipeline used to process cfDNA data and extract normalized depth at specified genomic regions.
