@@ -9,8 +9,17 @@ Output: Cleaned BED files with an n.bed suffix in Data/processed_bed/.
 
 
 
+Step 2: Consensus Peak Generation
+Script: 02_merge_peaks.sh
 
-Dependencies
-1. For peak merging:
-https://github.com/corceslab/ATAC_IterativeOverlapPeakMerging
-Download createIterativeOverlapPeakSet.R from https://github.com/corceslab/ATAC_IterativeOverlapPeakMerging and place it in the /tools folder
+Requirement: This step requires the createIterativeOverlapPeakSet.R script from the Corces Lab GitHub Repository.
+
+Instructions:
+
+Download createIterativeOverlapPeakSet.R from the link above.
+
+Place it in the root directory of this project.
+
+Run bash 02_merge_peaks.sh.
+
+This will merge your individual preprocessed peaks into a non-overlapping master peak set.
