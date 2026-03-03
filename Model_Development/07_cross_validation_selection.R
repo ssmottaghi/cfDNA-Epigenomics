@@ -1,7 +1,3 @@
-# ==============================================================================
-# SELECTION STEP 3: REFINING PEAKS BASED ON cfDNA SIGNAL
-# ==============================================================================
-
 # 1. Compare Healthy (samples 1-3) vs Cancer (samples 4-8)
 Normalied_depth_healthy <- c()
 Normalied_depth_cancer <- c()
