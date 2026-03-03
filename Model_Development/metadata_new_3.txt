@@ -1,0 +1,117 @@
+Sample	Group
+Sample_0199	B Cell
+Sample_0200	B Cell
+Sample_0201	B Cell
+Sample_0202	B Cell
+Sample_0203	B Cell
+Sample_0204	B Cell
+Sample_0242	B Cell
+Sample_0244	B Cell
+Sample_0246	B Cell
+Sample_0247	B Cell
+Sample_0282	B Cell
+Sample_0283	B Cell
+Sample_0284	B Cell
+Sample_0285	B Cell
+Sample_0286	B Cell
+Sample_0025	NK cell
+Sample_0026	NK cell
+Sample_0027	NK cell
+Sample_0029	NK cell
+Sample_0030	NK cell
+Sample_0031	NK cell
+Sample_0233	NK cell
+Sample_0234	NK cell
+Sample_0235	NK cell
+Sample_0236	NK cell
+Sample_0276	NK cell
+Sample_0278	NK cell
+Sample_0314	NK cell
+Sample_0315	NK cell
+Sample_0316	NK cell
+Sample_0214	T Cell
+Sample_0218	T Cell
+Sample_0220	T Cell
+Sample_0222	T Cell
+Sample_0260	T Cell
+Sample_0296	T Cell
+Sample_0302	T Cell
+Sample_0304	T Cell
+Sample_0921	T Cell
+Sample_0922	T Cell
+Sample_1017	T Cell
+Sample_1018	T Cell
+Sample_1019	T Cell
+Sample_1020	T Cell
+Sample_1021	T Cell
+Sample_1486	Colon
+Sample_1487	Colon
+Sample_1356	Ery Pro
+Sample_1357	Ery Pro
+Sample_0172	Lung
+Sample_0173	Lung
+Sample_0174	Lung
+Sample_0179	Lung
+Sample_0180	Lung
+Sample_0181	Lung
+Sample_0182	Lung
+Sample_0183	Lung
+Sample_0237	Monocyte
+Sample_0238	Monocyte
+Sample_0317	Monocyte
+Sample_0318	Monocyte
+Sample_0358	Monocyte
+Sample_0363	Monocyte
+Sample_0447	Monocyte
+Sample_1100	Monocyte
+Sample_1101	Monocyte
+Sample_1102	Monocyte
+Sample_1103	Monocyte
+Sample_1104	Monocyte
+Sample_1105	Monocyte
+Sample_1468	Monocyte
+Sample_1469	Monocyte
+Sample_1126	Neutrophil
+Sample_1127	Neutrophil
+Sample_1128	Neutrophil
+Sample_1129	Neutrophil
+Sample_1130	Neutrophil
+Sample_1131	Neutrophil
+Sample_1132	Neutrophil
+Sample_1133	Neutrophil
+Sample_1134	Neutrophil
+Sample_1135	Neutrophil
+Sample_1470	Neutrophil
+Sample_1471	Neutrophil
+Sample_1211	Pancreas
+Sample_1212	Pancreas
+Sample_1213	Pancreas
+Sample_1214	Pancreas
+Sample_1215	Pancreas
+Sample_1216	Pancreas
+Sample_0966	Cortical Neurons
+Sample_0967	Cortical Neurons
+Sample_0968	Cortical Neurons
+Sample_0969	Cortical Neurons
+Sample_0169	Prostate
+Sample_0170	Prostate
+Sample_0171	Prostate
+Sample_0175	Prostate
+Sample_0176	Prostate
+Sample_0177	Prostate
+Sample_0178	Prostate
+Sample_0097	Kidney
+Sample_0098	Kidney
+Sample_0099	Kidney
+Sample_0100	Kidney
+Sample_1011	Kidney
+Sample_1013	Kidney
+Sample_1014	Kidney
+Sample_1161	Artery
+Sample_1162	Artery
+Sample_1163	Artery
+Sample_1164	Artery
+Sample_1165	Artery
+Sample_1166	Artery
+Sample_1167	Artery
+Sample_1168	Artery
