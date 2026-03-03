@@ -12,7 +12,7 @@ Output: Cleaned BED files with an n.bed suffix in Data/processed_bed/.
 Step 2: Consensus Peak Generation
 Script: 02_merge_peaks.sh
 
-Requirement: This step requires the createIterativeOverlapPeakSet.R script from the [ Corces Lab GitHub Repository ] (https://github.com/corceslab/ATAC_IterativeOverlapPeakMerging/tree/main?tab=readme-ov-file).
+Requirement: This step requires the createIterativeOverlapPeakSet.R script from the [Corces Lab GitHub Repository](https://github.com/corceslab/ATAC_IterativeOverlapPeakMerging/tree/main?tab=readme-ov-file).
 
 Instructions:
 
