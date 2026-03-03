@@ -3,7 +3,7 @@
 # 1. Ensure the directories match your project structure
 METADATA="Data/metadata.txt"
 SUMMIT_DIR="Data/processed_bed/"
-OUT_DIR="Data/ATACdb/Results/"
+OUT_DIR="Data/Results/"
 BLACKLIST="Data/blacklist19.bed"
 
 # 2. Check if the external R script is present
