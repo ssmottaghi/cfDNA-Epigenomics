@@ -73,7 +73,9 @@ Output: The final biomarker matrix (Final_Biomarker_Matrix.rds) used for the pap
 
 Script: 08_cfDNA_deconvolution.R
 
-Action: > 1. Creates a Reference Matrix (df_all_4) by Min-Max scaling the ATAC-seq signal of the final 650 regions.
+Action:
+
+1. Creates a Reference Matrix (df_all_4) by Min-Max scaling the ATAC-seq signal of the final 650 regions.
 
 2. Uses NNLS and SVR to deconvolve the patient cfDNA signal against this reference.
 
@@ -85,4 +87,5 @@ Output: Stacked bar plots in the Results/ folder showing the predicted tissue-of
 Script: 09_null_model_validation.R
 
 Action: Runs 100 deconvolution iterations using random genomic regions. It compares the RCH (Relative Cancer/Healthy) values of the main model against this random distribution.
+
 Significance: Proves that the identified biomarkers provide significantly higher signal-to-noise than random genomic background (represented by the "cfDECOR" star vs. the boxplots).
